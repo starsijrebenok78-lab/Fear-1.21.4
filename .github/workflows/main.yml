@@ -1,0 +1,32 @@
+name: Build Fear Client
+
+on:
+workflow_dispatch:
+
+jobs:
+build:
+runs-on: ubuntu-latest
+steps:
+- name: Checkout source
+uses: actions/checkout@v4
+
+  - name: Set up Java 21
+    uses: actions/setup-java@v4
+    with:
+      distribution: temurin
+      java-version: '21'
+
+  - name: Build JAR
+    run: |
+      chmod +x gradlew
+      ./gradlew build
+
+  - name: Upload build artifacts
+    uses: actions/upload-artifact@v4
+    with:
+      name: FearClient-JAR
+      path: |
+        **/build/libs/*.jar
+        !**/*-sources.jar
+      if-no-files-found: error
+```
